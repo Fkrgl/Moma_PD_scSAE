@@ -1,0 +1,43 @@
+# Example Configuration with Masked Gene Modeling (MGM)
+
+training:
+  # Standard training parameters
+  batch_size: 64
+  epochs: 2 # 15
+  lr: 0.0001
+  mgm_weight: 1  
+  weight_decay: 0.01
+  amp: true
+  patience: 5
+  
+  # MGM (Masked Gene Modeling) Parameters
+  # Set use_mgm=true to enable MGM objective during fine-tuning
+  do_mvc: true
+  use_mgm: true           # Enable MGM (default: false)
+  use_gepc: true
+  mask_ratio: 0.15        # Percentage of genes to mask (default: 0.15)
+                          #   0.15 = mask 15% of genes (recommended)
+                          #   0.25 = more aggressive masking
+                          # Pretraining used 0.15-0.75
+  mask_value: -1          # Value for masked genes (default: -1)
+  pad_value: -2            # Padding value (default: 0)
+  gepc_weight: 1
+
+model:
+  device: 1
+  fast_transformer_backend: "linear"
+  freeze_encoder: false
+  use_fast_transformer: true
+  max_len: 2000
+  model_dir: /local/scFM/scGPT/pretrained/scGPT_human
+  save_dir: /local/scFM/scGPT/finetuned/scGPT_human/nido/mgm_gepc_weight_1_epoch_2
+
+data:
+  key_donor: "donor_id"                 # Your donor column
+  key_label: "disease"               # Your label column
+  healthy_class: "Control"
+  diseased_class: "LRRK2_PD"
+  adata_path: /local/fkriegel/Moma_PD_scSAE/dat/nido_scgpt_preprocessed.h5ad
+wandb:
+  project: "sae-scgpt"
+  run_name: "mgm loss"
