@@ -228,9 +228,10 @@ def extract_embeddings(
     )
     
     # Filter to genes in vocabulary
+    adata_gene_names = adata.var['feature_name'] if 'feature_name' in adata.var else adata.var.index.values
     adata.var["id_in_vocab"] = [
         vocab[gene] if gene in vocab else -1 
-        for gene in adata.var['feature_name']
+        for gene in adata_gene_names
     ]
     
     print(f"\nGene filtering:")
